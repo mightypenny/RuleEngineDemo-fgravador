@@ -1,0 +1,124 @@
+[
+  {
+    "WorkflowName": "ServiceFeeRule",
+    "GlobalParams":[
+      {
+        "Name":"myFirstName",
+        "Expression":"employeeInfo.FirstName"
+      }
+    ],
+    "Rules": [
+      {
+        "RuleName": "GiveBonus10",
+        "SuccessEvent": "10",
+        "ErrorMessage": "failed 10 bonus.",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "myFirstName == \"Francis\" AND employeeInfo.LastName == \"Gravador\" AND employeeInfo.Salary <= 5000",
+        "Actions": {
+          "OnSuccess": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "employeeInfo.Salary * 0.1"
+            }
+          },
+          "OnFailure": {
+            "Name": "EvaluateRule",
+            "Context": {
+              "WorkflowName": "BonusRule",
+              "ruleName": "GiveBonus5"
+            }
+          }
+//          "OnFailure": {
+//            "Name": "OutputExpression",
+//            "Context": {
+//              "Expression": "-20"
+//            }
+//          }
+        }
+      },
+      {
+        "RuleName": "GiveBonus5",
+        "SuccessEvent": "5",
+        "ErrorMessage": "failed 5 bonus.",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "employeeInfo.FirstName == \"Francis\"",
+        "Actions": {
+          "OnSuccess": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "employeeInfo.Salary * 0.05"
+            }
+          },
+          "OnFailure": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "-5"
+            }
+          }
+        }
+      }
+//          "OnFailure": {
+//            "Name": "EvaluateRule", -- rule chaining
+//            "Context": {
+//              "WorkflowName": "BonusRule",
+//              "ruleName": "GiveBonus5"
+//            }
+//          }
+//        }
+//        "Actions": {
+//          "OnSuccess": {
+//            "Name": "CustomRuleAction",
+//            "Context": {
+//              "customContextSalary": "employeeInfo.Salary * 99 + 100"
+//            }
+//          }
+//        }
+//      {
+//        "RuleName": "GiveBonus20",
+//        "SuccessEvent": "20",
+//        "ErrorMessage": "failed 20 bonus.",
+//        "ErrorType": "Error",
+//        "RuleExpressionType": "LambdaExpression",
+//        "Expression": "myFirstName == \"Naomi\" AND employeeInfo.LastName == \"Nayve\" AND employeeInfo.Salary <= 10000",
+//        "Actions": {
+//          "OnSuccess": {
+//            "Name": "OutputExpression",
+//            "Context": {
+//              "Expression": "employeeInfo.Salary * 0.2"
+//            }
+//          }
+//          "OnFailure": {
+//            "Name": "GiveBonus20",
+//            "Context": {
+//              "Expression": "-100"
+//            }
+//          }
+//        }
+//      },
+//      {
+//        "RuleName": "ComplexRule",
+//        "SuccessEvent": "100",
+//        "ErrorMessage": "failed complex rule bonus.",
+//        "ErrorType": "Error",
+//        "RuleExpressionType": "LambdaExpression",
+//        "Expression": "ComplexRulesHelper.ComplexCondition(employeeInfo)",
+//        "Actions": {
+//          "OnSuccess": {
+//            "Name": "OutputExpression",
+//            "Context": {
+//              "Expression": "ComplexRulesHelper.ComplexCalculation(employeeInfo)"
+//            }
+//          },
+//          "OnFailure": {
+//            "Name": "OutputExpression",
+//            "Context": {
+//              "Expression": "-5000"
+//            }
+//          }
+//        }
+//      }
+    ]
+  }
+] 

@@ -1,0 +1,44 @@
+[
+  {
+    "WorkflowName": "VariableAmountServiceFeeFlow",
+    "GlobalParams": [
+      {
+        "Name": "procedureName",
+        "Expression": "procedureInfo.Name.ToLower()"
+      },
+      {
+        "Name": "totalAmountUsed",
+        "Expression": "totalAmountUsedInfo"
+      },
+      {
+        "Name": "serviceFee",
+        "Expression": "10.0"
+      },
+      {
+        "Name": "ceilingAmount",
+        "Expression": "10.0"
+      }
+    ],
+    "Rules": [
+      {
+        "RuleName": "NonChronicRule",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "(procedureName == \"screening\" OR procedureName == \"vaccination\") AND totalAmountUsed < ceilingAmount",
+        "Actions": {
+          "OnSuccess": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "serviceFee"
+            }
+          },
+          "OnFailure": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "0.0"
+            }
+          }
+        }
+      }
+    ]
+  }
+]

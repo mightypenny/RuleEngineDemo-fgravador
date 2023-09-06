@@ -1,0 +1,29 @@
+[
+  {
+    "WorkflowName": "ServiceFeeFlow",
+    "Rules": [
+      {
+        "RuleName": "ServiceFee10",
+        "SuccessEvent": "200",
+        "ErrorMessage": "Failed Service Fee 10 validation.",
+        "ErrorType": "Error",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "metaDataInfo.ProcedureName IN (\"vaccine 1\", \"vaccine 2\", \"vaccine 3\", \"vaccine 4\", \"screen 1\", \"screen 2\")",
+        "Actions": {
+          "OnSuccess": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "10"
+            }
+          },
+          "OnFailure": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "0"
+            }
+          }
+        }
+      }
+    ]
+  }
+] 

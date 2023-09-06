@@ -1,0 +1,51 @@
+[
+  {
+    "WorkflowName": "FixAmountServiceFeeFlow",
+    "GlobalParams":[
+      {
+        "Name":"procedureName",
+        "Expression":"procedureInfo.Name.ToLower()"
+      }
+    ],
+    "Rules": [
+      {
+        "RuleName": "NonChronicRule",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "procedureName == \"non-chronic enrollee\"",
+        "Actions": {
+          "OnSuccess": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "30.0"
+            }
+          },
+          "OnFailure": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "0.0"
+            }
+          }
+        }
+      },
+      {
+        "RuleName": "ChronicRule",
+        "RuleExpressionType": "LambdaExpression",
+        "Expression": "procedureName == \"chronic enrollee (non-dhl)\" OR procedureName == \"chronic enrollee (dhl)\"",
+        "Actions": {
+          "OnSuccess": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "70.0"
+            }
+          },
+          "OnFailure": {
+            "Name": "OutputExpression",
+            "Context": {
+              "Expression": "0.0"
+            }
+          }
+        }
+      }
+    ]
+  }
+]
